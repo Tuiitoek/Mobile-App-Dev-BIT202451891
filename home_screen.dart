@@ -1,120 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class DashboardScreen extends StatelessWidget {
+  const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("LeafLink"),
+        title: const Text("LeafLink Dashboard"),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_cart),
-            onPressed: () => context.go('/cart'),
-          ),
+          IconButton(icon: const Icon(Icons.shopping_cart), onPressed: () => context.go('/orders')),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: GridView.count(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
           children: [
-            const Text(
-              "Good morning, Tea Lover ☕",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            _buildMenuCard(
+              context,
+              icon: Icons.store,
+              title: "Shop Teas",
+              color: Colors.green,
+              onTap: () => context.go('/shop'),
             ),
-            const SizedBox(height: 8),
-            const Text(
-              "Discover fresh teas directly from the farms",
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+            _buildMenuCard(
+              context,
+              icon: Icons.list_alt,
+              title: "My Orders",
+              color: Colors.orange,
+              onTap: () => context.go('/orders'),
             ),
-            const SizedBox(height: 24),
+            _buildMenuCard(
+              context,
+              icon: Icons.park,
+              title: "Farm Records",
+              color: Colors.teal,
+              onTap: () => context.go('/farm-records'),
+            ),
+            _buildMenuCard(
+              context,
+              icon: Icons.person,
+              title: "Profile",
+              color: Colors.blue,
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-            // Search bar
-            TextField(
-              decoration: InputDecoration(
-                hintText: "Search teas or farms...",
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 32),
-
-            const Text(
-              "Featured Farms",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 16),
-
-            // Featured Farms - Image removed, using cards with icons
-            SizedBox(
-              height: 160,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  final farms = [
-                    "Uva Estate\nSri Lanka",
-                    "Darjeeling Hills\nIndia",
-                    "Kyoto Green\nJapan"
-                  ];
-                  return Container(
-                    width: 160,
-                    margin: const EdgeInsets.only(right: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.grey.shade200),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.park,
-                            size: 48,
-                            color: Color(0xFF2E7D32),
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            farms[index],
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            const SizedBox(height: 40),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () => context.go('/shop'),
-                child: const Text("Browse All Teas"),
-              ),
-            ),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton(
-                onPressed: () => context.go('/cart'),
-                child: const Text("View My Cart"),
-              ),
-            ),
+  Widget _buildMenuCard(BuildContext context, {required IconData icon, required String title, required Color color, required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 50, color: color),
+            const SizedBox(height: 12),
+            Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           ],
         ),
       ),
